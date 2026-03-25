@@ -1,0 +1,316 @@
+/* =============================================================================
+   CONTROLLER — style.css (telephone du joueur)
+   ============================================================================= */
+
+/* --- Reset CSS --- */
+/* Supprime les marges/paddings par defaut et utilise box-sizing: border-box
+   pour que les tailles incluent padding + bordures */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: #1a1a2e;
+  color: #eee;
+  height: 100dvh; /* dvh = hauteur dynamique du viewport (gere la barre d'URL sur mobile) */
+  overflow: hidden; /* Pas de scroll */
+  -webkit-user-select: none; /* Empeche la selection de texte (pour le tactile) */
+  user-select: none;
+}
+
+/* --- Ecrans (join et controller) ---
+   Les deux ecrans occupent tout l'espace et centrent leur contenu */
+.screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100dvh;
+  padding: 2rem;
+  gap: 1.5rem;
+}
+
+/* Classe utilitaire pour cacher un element */
+.hidden {
+  display: none !important;
+}
+
+/* --- Ecran de connexion (Join) --- */
+h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-width: 320px;
+}
+
+label {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+}
+
+input {
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  border: 2px solid #333;
+  background: #16213e;
+  color: #eee;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input:focus {
+  border-color: #e94560;
+}
+
+/* Boutons de selection d'equipe (cote a cote) */
+.team-select {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.team-btn {
+  flex: 1;
+  padding: 0.8rem;
+  border-radius: 12px;
+  border: 2px solid #333;
+  background: #16213e;
+  color: #eee;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+/* Style du bouton quand l'equipe rouge est selectionnee */
+.team-btn[data-team="rouge"].selected {
+  border-color: #e94560;
+  background: #e9456022; /* Rouge semi-transparent */
+  color: #e94560;
+}
+
+/* Style du bouton quand l'equipe bleue est selectionnee */
+.team-btn[data-team="bleu"].selected {
+  border-color: #4ea8de;
+  background: #4ea8de22; /* Bleu semi-transparent */
+  color: #4ea8de;
+}
+
+/* Bouton principal "Rejoindre" */
+.btn-primary {
+  padding: 1rem;
+  border-radius: 12px;
+  border: none;
+  background: #e94560;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition:
+    transform 0.1s,
+    opacity 0.2s;
+}
+
+.btn-primary:active {
+  transform: scale(0.97); /* Petit effet "appui" au clic */
+}
+
+/* --- Ecran Controller (manette) --- */
+
+/* HUD du controller : pseudo + equipe + scores + timer */
+.controller-hud {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.player-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* Ligne de score et timer */
+.controller-score {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+#ctrl-timer {
+  font-variant-numeric: tabular-nums; /* Chiffres a largeur fixe (evite que le timer "saute") */
+  opacity: 0.6;
+}
+
+/* Mini-pastilles de score (rouge et bleu) */
+.mini-score {
+  padding: 0.15rem 0.6rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+.mini-score.rouge {
+  background: #e9456033;
+  color: #e94560;
+}
+
+.mini-score.bleu {
+  background: #4ea8de33;
+  color: #4ea8de;
+}
+
+/* Badge d'equipe affiche a cote du pseudo */
+.badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.badge.rouge {
+  background: #e9456033;
+  color: #e94560;
+}
+
+.badge.bleu {
+  background: #4ea8de33;
+  color: #4ea8de;
+}
+
+/* --- Joystick virtuel ---
+   Zone tactile circulaire avec un stick deplacable.
+   Le joystick occupe l'espace disponible sous le HUD.
+*/
+#joystick-zone {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  touch-action: none; /* Empeche le scroll / zoom pendant l'utilisation du joystick */
+}
+
+/* Base du joystick : grand cercle de fond */
+#joystick-base {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: #16213e;
+  border: 2px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Stick : cercle interieur que le joueur deplace */
+#joystick-stick {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #2a2a4e;
+  border: 3px solid #555;
+  position: absolute;
+  transition: background 0.15s;
+  /* Centre par defaut (sera deplace par le JS) */
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none; /* Les events sont geres par la base */
+}
+
+/* Stick quand le joueur touche le joystick */
+#joystick-stick.active {
+  background: #e94560;
+  border-color: #ff6b81;
+}
+
+/* =============================================================================
+   OVERLAY FIN DE PARTIE
+   S'affiche par-dessus tout sur le controller quand la partie est terminee.
+   ============================================================================= */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: #0f0f23ee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.overlay.hidden {
+  display: none;
+}
+
+.gameover-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  text-align: center;
+  padding: 2rem;
+  color: #eee;
+}
+
+#ctrl-gameover-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+
+#ctrl-gameover-scores {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Pastille de score agrandie pour le gameover */
+.mini-score.large {
+  font-size: 2.5rem;
+  font-weight: 900;
+  padding: 0.4rem 1rem;
+  border-radius: 12px;
+}
+
+.gameover-vs {
+  font-size: 1rem;
+  opacity: 0.4;
+  font-weight: 800;
+}
+
+#ctrl-gameover-winner {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+#ctrl-gameover-winner.rouge {
+  color: #e94560;
+}
+#ctrl-gameover-winner.bleu {
+  color: #4ea8de;
+}
+
+#ctrl-gameover-restart {
+  font-size: 0.95rem;
+  opacity: 0.6;
+}

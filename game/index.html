@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ecran de jeu</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!--
+      HUD (Head-Up Display) : barre d'info en haut de l'ecran
+      Affiche les scores des deux equipes et le timer.
+      Position fixee en haut de la page (CSS: position: fixed).
+    -->
+    <div id="hud">
+      <div class="hud-team rouge">
+        <span class="team-dot rouge"></span>
+        Rouge : <span id="score-rouge">0</span>
+      </div>
+      <div id="timer">1:00</div>
+      <div class="hud-team bleu">
+        <span class="team-dot bleu"></span>
+        Bleu : <span id="score-bleu">0</span>
+      </div>
+    </div>
+
+    <!--
+      CONTAINER 3D : la scene Three.js sera inseree ici par le script.
+      Le canvas 3D remplace l'ancienne arene 2D.
+    -->
+    <div id="game-container">
+      <!-- Message affiche quand aucun joueur n'est connecte -->
+      <div id="waiting">En attente de joueurs...</div>
+    </div>
+
+    <!--
+      ECRAN DE FIN DE PARTIE (overlay)
+      Cache par defaut (class "hidden").
+      S'affiche par-dessus tout quand la partie se termine.
+      Montre les scores finaux, le gagnant, et le compte a rebours avant relance.
+    -->
+    <div id="screen-gameover" class="overlay hidden">
+      <div class="gameover-card">
+        <h1 id="gameover-title">Fin de la partie !</h1>
+
+        <!-- Scores finaux : Rouge VS Bleu -->
+        <div class="gameover-scores">
+          <div class="gameover-team rouge">
+            <span class="team-dot rouge"></span>
+            Rouge
+            <span class="gameover-points" id="final-rouge">0</span>
+          </div>
+          <div class="gameover-vs">VS</div>
+          <div class="gameover-team bleu">
+            <span class="team-dot bleu"></span>
+            Bleu
+            <span class="gameover-points" id="final-bleu">0</span>
+          </div>
+        </div>
+
+        <!-- Compte a rebours avant la prochaine partie -->
+        <div id="gameover-restart">
+          Prochaine partie dans <span id="restart-countdown">30</span>s
+        </div>
+      </div>
+    </div>
+
+    <!--
+      QR CODE : affiche en bas a droite de l'ecran
+      Permet aux joueurs de scanner pour rejoindre la partie directement.
+      Genere dynamiquement par le JS avec la librairie qrcode-generator (via CDN).
+    -->
+    <div id="qr-box">
+      <div id="qr-code"></div>
+      <span id="qr-label">Scannez pour jouer</span>
+    </div>
+
+    <!-- Three.js : moteur 3D pour le navigateur (r149 = derniere version avec build global) -->
+    <script src="https://unpkg.com/three@0.149.0/build/three.min.js"></script>
+    <!-- Librairie qrcode-generator : genere des QR codes cote client, zero dependance -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,248 @@
+/* =============================================================================
+   ECRAN DE JEU — style.css (affiche sur le projecteur / TV)
+   ============================================================================= */
+
+/* --- Reset CSS --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0f0f23;
+  overflow: hidden; /* Pas de scrollbar */
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+/* =============================================================================
+   HUD (Head-Up Display)
+   Barre d'info fixee en haut de l'ecran : score rouge | timer | score bleu
+   ============================================================================= */
+
+#hud {
+  position: fixed;
+  top: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%); /* Centrer horizontalement */
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  z-index: 10; /* Au-dessus de tout */
+}
+
+/* Bloc de score d'une equipe */
+.hud-team {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #eee;
+  background: #1a1a2ecc; /* Fond semi-transparent */
+  padding: 0.5rem 1.25rem;
+  border-radius: 12px;
+  backdrop-filter: blur(8px); /* Effet de flou derriere */
+}
+
+/* Timer au centre du HUD */
+#timer {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #eee;
+  background: #1a1a2ecc;
+  padding: 0.4rem 1.5rem;
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  font-variant-numeric: tabular-nums; /* Chiffres a largeur fixe (pas de "saut") */
+}
+
+/* Timer en mode urgent : rouge + clignotant (derniers 30 secondes) */
+#timer.urgent {
+  color: #e94560;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Petit rond colore a cote du nom d'equipe */
+.team-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.team-dot.rouge {
+  background: #e94560;
+}
+
+.team-dot.bleu {
+  background: #4ea8de;
+}
+
+/* =============================================================================
+   CONTAINER 3D
+   Le canvas Three.js est insere dans ce conteneur par le script.
+   Il occupe tout l'ecran derriere les elements HTML (HUD, overlay, QR code).
+   ============================================================================= */
+
+#game-container {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+/* Le canvas Three.js doit remplir tout le conteneur */
+#game-container canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Message "En attente de joueurs..." affiche au centre de l'ecran */
+#waiting {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #555;
+  font-weight: 600;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* =============================================================================
+   ECRAN DE FIN DE PARTIE (overlay)
+   S'affiche par-dessus tout quand la partie se termine.
+   ============================================================================= */
+
+/* L'overlay couvre tout l'ecran avec un fond sombre semi-transparent */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: #0f0f23ee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100; /* Par-dessus tout, y compris le HUD */
+}
+
+.overlay.hidden {
+  display: none;
+}
+
+/* Carte centrale avec les resultats */
+.gameover-card {
+  text-align: center;
+  color: #eee;
+}
+
+.gameover-card h1 {
+  font-size: 3rem;
+  margin-bottom: 2rem;
+}
+
+/* Scores finaux : Rouge VS Bleu */
+.gameover-scores {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.gameover-team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.gameover-team .team-dot {
+  width: 20px;
+  height: 20px;
+}
+
+/* Le nombre de points en tres gros */
+.gameover-points {
+  font-size: 4rem;
+  font-weight: 900;
+}
+
+/* Couleur du score selon l'equipe */
+.gameover-team.rouge .gameover-points {
+  color: #e94560;
+}
+
+.gameover-team.bleu .gameover-points {
+  color: #4ea8de;
+}
+
+/* "VS" entre les deux equipes */
+.gameover-vs {
+  font-size: 1.5rem;
+  font-weight: 800;
+  opacity: 0.4;
+}
+
+/* L'equipe gagnante est legerement agrandie */
+.gameover-team.winner {
+  transform: scale(1.15);
+}
+
+/* Texte "Prochaine partie dans Xs" */
+#gameover-restart {
+  font-size: 1.2rem;
+  opacity: 0.6;
+  margin-top: 1rem;
+}
+
+/* =============================================================================
+   QR CODE
+   Affiche en bas a droite de l'ecran pour que les joueurs puissent scanner
+   et rejoindre la partie facilement.
+   ============================================================================= */
+
+#qr-box {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  background: #1a1a2ecc;
+  padding: 1rem;
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+  z-index: 10;
+}
+
+/* Le QR code genere est une balise <img> a l'interieur de cette div */
+#qr-code img {
+  display: block;
+  width: 120px;
+  height: 120px;
+  border-radius: 8px;
+}
+
+#qr-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #eee;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}

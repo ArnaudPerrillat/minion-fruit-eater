@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Empecher le zoom sur mobile pour que le controller se comporte comme une app -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <title>Controller</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!--
+      ECRAN 1 : Formulaire pour rejoindre la partie
+      Cet ecran s'affiche quand le joueur arrive sur la page.
+      Il disparait une fois que le serveur confirme la connexion.
+    -->
+    <div id="screen-join" class="screen">
+      <h1>Rejoindre la partie</h1>
+
+      <div class="form">
+        <!-- Champ pour entrer son pseudo -->
+        <label for="pseudo">Pseudo</label>
+        <input
+          type="text"
+          id="pseudo"
+          placeholder="Ton pseudo..."
+          maxlength="12"
+          autocomplete="off"
+        />
+
+        <!-- Choix de l'equipe (rouge ou bleu) -->
+        <label>Equipe</label>
+        <div class="team-select">
+          <!-- Le bouton "rouge" est selectionne par defaut (class "selected") -->
+          <button class="team-btn selected" data-team="rouge">Rouge</button>
+          <button class="team-btn" data-team="bleu">Bleu</button>
+        </div>
+
+        <!-- Bouton pour envoyer le formulaire au serveur -->
+        <button id="btn-join" class="btn-primary">Rejoindre</button>
+      </div>
+    </div>
+
+    <!--
+      ECRAN 2 : Le controller (manette)
+      Cache par defaut (class "hidden"), s'affiche apres la connexion.
+      Contient : infos du joueur, scores, timer, et le D-pad.
+    -->
+    <div id="screen-controller" class="screen hidden">
+      <!-- Mini HUD : pseudo + equipe + scores + timer -->
+      <div class="controller-hud">
+        <div class="player-info">
+          <span id="player-pseudo">-</span>
+          <span id="player-team" class="badge">-</span>
+        </div>
+        <!-- Scores et timer affiches sur le telephone -->
+        <div class="controller-score">
+          <span class="mini-score rouge"
+            ><span id="ctrl-score-rouge">0</span></span
+          >
+          <span id="ctrl-timer">5:00</span>
+          <span class="mini-score bleu"
+            ><span id="ctrl-score-bleu">0</span></span
+          >
+        </div>
+      </div>
+
+      <!--
+        JOYSTICK : zone tactile circulaire
+        Le joueur deplace le "stick" (cercle interieur) dans la zone.
+        Le script JS calcule la direction et envoie les messages au serveur.
+      -->
+      <div id="joystick-zone">
+        <div id="joystick-base">
+          <div id="joystick-stick"></div>
+        </div>
+      </div>
+    </div>
+
+    <!--
+      OVERLAY FIN DE PARTIE
+      S'affiche par-dessus le controller quand la partie se termine.
+      Montre le resultat et un compte a rebours avant la prochaine partie.
+    -->
+    <div id="screen-gameover" class="overlay hidden">
+      <div class="gameover-content">
+        <p id="ctrl-gameover-title">Fin de la partie !</p>
+        <div id="ctrl-gameover-scores">
+          <span class="mini-score rouge large"
+            ><span id="ctrl-final-rouge">0</span></span
+          >
+          <span class="gameover-vs">VS</span>
+          <span class="mini-score bleu large"
+            ><span id="ctrl-final-bleu">0</span></span
+          >
+        </div>
+        <p id="ctrl-gameover-winner"></p>
+        <p id="ctrl-gameover-restart">
+          Prochaine partie dans <span id="ctrl-countdown">30</span>s
+        </p>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
